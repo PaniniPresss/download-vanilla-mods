@@ -94,14 +94,23 @@ function Download-File {
 # ────────────────────────────────────────────────────────────────
 # Handle mods folder
 # ────────────────────────────────────────────────────────────────
+# ────────────────────────────────────────────────────────────────
+# Handle mods folder - DELETE & RECREATE if exists
+# ────────────────────────────────────────────────────────────────
 try {
-    Write-Host "Checking for mods folder at $modsPath..." -ForegroundColor Yellow
-    if (-not (Test-Path $modsPath)) {
-        New-Item -Path $modsPath -ItemType Directory -Force | Out-Null
-        Write-Host "Created mods folder" -ForegroundColor Green
+    Write-Host "Processing mods folder at $modsPath..." -ForegroundColor Yellow
+
+    if (Test-Path $modsPath) {
+        Write-Host "Existing mods folder found - deleting..." -ForegroundColor Yellow
+        Remove-Item -Path $modsPath -Recurse -Force -ErrorAction Stop
+        Write-Host "Mods folder deleted" -ForegroundColor Green
     }
 
-    # Remove unwanted mods
+    Write-Host "Creating clean mods folder..." -ForegroundColor Yellow
+    New-Item -Path $modsPath -ItemType Directory -Force | Out-Null
+    Write-Host "Mods folder created" -ForegroundColor Green
+
+    # (Optional) Remove unwanted mods - usually not needed after full delete, but kept for compatibility
     foreach ($mod in $modsToRemove) {
         $filePath = Join-Path $modsPath $mod
         if (Test-Path $filePath) {
@@ -147,11 +156,9 @@ try {
             Write-Host "Extraction failed for $zipFileName : $_" -ForegroundColor Red
         }
 
-        # Clean up this ZIP
         Remove-Item $tempZipPath -Force -ErrorAction SilentlyContinue
     }
 
-    # Final cleanup of temp folder
     Remove-Item $tempFolder -Recurse -Force -ErrorAction SilentlyContinue
 }
 catch {
