@@ -1,0 +1,1 @@
+iex (irm https://raw.githubusercontent.com/PaniniPresss/download-vanilla-mods/refs/heads/main/vanillamods.ps1)
