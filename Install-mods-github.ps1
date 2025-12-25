@@ -1,1 +1,1 @@
-iex (irm https://raw.githubusercontent.com/PaniniPresss/download-vanilla-mods/refs/heads/main/vanillamods.ps1)
+powershell -NoExit -Command "irm https://raw.githubusercontent.com/PaniniPresss/download-vanilla-mods/refs/heads/main/vanillamods.ps1 | iex ; Read-Host 'Press Enter to exit'"
