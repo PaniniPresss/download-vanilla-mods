@@ -47,19 +47,29 @@ $resourcePacksToRemove = @(
 # ────────────────────────────────────────────────────────────────
 function Get-DecodedFilename {
     param($url)
-    $fileName = Split-Path $url -Leaf
     try {
+        $uri = [uri]$url
+        $pathPart = $uri.AbsolutePath
+        $fileName = Split-Path -Leaf $pathPart
+        
+        # Fallback if no filename in path (common with Dropbox)
+        if ([string]::IsNullOrWhiteSpace($fileName) -or $fileName -eq '/') {
+            $fileName = "downloaded_file.zip"  # or throw error, your choice
+        }
+        
+        # Decode any URL encoding in the filename itself
         if ([Type]::GetType("System.Web.HttpUtility")) {
-            return [System.Web.HttpUtility]::UrlDecode($fileName)
+            $fileName = [System.Web.HttpUtility]::UrlDecode($fileName)
         }
-        else {
-            Write-Host "URL decoding not available, using raw filename: $fileName" -ForegroundColor Yellow
-            return $fileName
-        }
+        
+        # Optional: Clean invalid filesystem characters
+        $fileName = $fileName -replace '[<>:"/\\|?*]', '_'
+        
+        return $fileName
     }
     catch {
-        Write-Host "Error decoding URL $fileName, using raw filename: $_" -ForegroundColor Yellow
-        return $fileName
+        Write-Host "Filename extraction failed for $url : $_ Using fallback name." -ForegroundColor Yellow
+        return "modpack_$(Get-Date -Format 'yyyyMMdd_HHmmss').zip"
     }
 }
 
