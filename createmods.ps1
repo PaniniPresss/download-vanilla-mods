@@ -23,7 +23,7 @@ $mods = @(
 
 # ZIP files (Dropbox links recommended with ?dl=1) - will be extracted into mods folder
 $modZips = @(
-    "https://www.dropbox.com/scl/fi/ayb1toayjycsmtc5di01a/Create-Server-Mods.zip?rlkey=68kh38usb288qa7p7oadqpvhn&st=jnmxewex&dl=1"
+    "https://www.dropbox.com/scl/fi/cc3yyt99e76jdwpb3plnd/Create-Mod.zip?rlkey=pvog3img536blfoo73ol00jbp&st=cvxujc18&dl=1"
 )
 
 # Mods to remove if present (filenames)
